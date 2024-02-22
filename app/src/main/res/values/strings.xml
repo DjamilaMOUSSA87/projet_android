@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">scolarite</string>
+    <string-array name="genres_array">
+            <item>Féminin</item>
+            <item>Masculin</item>
+            <item>Non spécifié</item>
+    </string-array>
+
+</resources>
