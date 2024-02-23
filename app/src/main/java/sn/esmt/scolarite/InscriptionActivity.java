@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,10 +22,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import sn.esmt.scolarite.http.Api;
+import sn.esmt.scolarite.http.EtudiantResponce;
+
 public class InscriptionActivity extends AppCompatActivity {
 
-    private EditText editTextNom, editTextPrenom, editTextAdresse, editTextTelephone, editTextEmail;
-    private Spinner spinnerGenre;
+    private EditText editTextNom, editTextPrenom, editTextAdresse, editTextTelephone, editTextFrais, editTextmat;
     private Button buttonInscription;
 
     @Override
@@ -33,49 +41,47 @@ public class InscriptionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inscription);
 
         // Liaison des vues avec les éléments de l'interface utilisateur
-        editTextNom = findViewById(R.id.editTextNom);
-        editTextPrenom = findViewById(R.id.editTextPrenom);
-        editTextAdresse = findViewById(R.id.editTextAdresse);
-        editTextTelephone = findViewById(R.id.editTextTelephone);
-        editTextEmail = findViewById(R.id.editTextEmail);
-        spinnerGenre = findViewById(R.id.spinnerGenre);
-        buttonInscription = findViewById(R.id.buttonInscription);
+        editTextmat = (EditText) findViewById(R.id.editTextmat);
+        editTextNom = (EditText) findViewById(R.id.editTextNom);
+        editTextPrenom = (EditText) findViewById(R.id.editTextPrenom);
+        editTextAdresse = (EditText) findViewById(R.id.editTextAdresse);
+        editTextTelephone = (EditText) findViewById(R.id.editTextTelephone);
+        editTextFrais = (EditText) findViewById(R.id.editTextFrais);
+        buttonInscription = (Button) findViewById(R.id.buttonInscription);
+        buttonInscription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        // Remplir le spinner avec les options de genre
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.genres_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerGenre.setAdapter(adapter);
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://10.0.2.2:8082/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                Api api = retrofit.create(Api.class);
 
-        // Action lorsque le bouton Inscrire est cliqué
-        buttonInscription.setOnClickListener(v -> inscrireEtudiant());
-    }
+                //Creation d'un objet etudiant a ajouter dans la base
+                EtudiantResponce e = new EtudiantResponce();
+                e.getMat(editTextmat.getText().toString());
+                e.setNom(editTextNom.getText().toString());
+                e.setPrenom(editTextPrenom.getText().toString());
+                e.setAdr(editTextAdresse.getText().toString());
+                e.setTel(Integer.parseInt(editTextTelephone.getText().toString()));
+                e.setFrais(Double.parseDouble(editTextFrais.getText().toString()));
+                Call<EtudiantResponce> callSave = api.saveEtudiant(e);
+                callSave.enqueue(new Callback<EtudiantResponce>() {
+                    @Override
+                    public void onResponse(Call<EtudiantResponce> call, Response<EtudiantResponce> response) {
+                        Toast.makeText(InscriptionActivity.this,"Etudiant inscrit avec succes",Toast.LENGTH_LONG);
+                    }
 
-    // Méthode pour inscrire un étudiant
-    private void inscrireEtudiant() {
-        // Récupérer les valeurs des champs
-        String nom = editTextNom.getText().toString().trim();
-        String prenom = editTextPrenom.getText().toString().trim();
-        String genre = spinnerGenre.getSelectedItem().toString();
-        String adresse = editTextAdresse.getText().toString().trim();
-        String telephone = editTextTelephone.getText().toString().trim();
-        String email = editTextEmail.getText().toString().trim();
+                    @Override
+                    public void onFailure(Call<EtudiantResponce> call, Throwable t) {
+                        Toast.makeText(InscriptionActivity.this,"Impossible d'acceder au serveur",Toast.LENGTH_LONG);
 
-        // Vérifier si les champs sont vides
-        if (nom.isEmpty() || prenom.isEmpty() || genre.isEmpty() || adresse.isEmpty() || telephone.isEmpty() || email.isEmpty()) {
-            Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
-        } else {
-            // Effectuer l'inscription (sauvegarde des données dans une base de données, envoi à un serveur, etc.)
-            // Ici, tu peux mettre la logique pour enregistrer les données dans la base de données ou ailleurs
-            // Par exemple :
-            // databaseManager.saveEtudiant(nom, prenom, genre, adresse, telephone, email);
+                    }
+                });
 
-            // Afficher un message de succès
-            Toast.makeText(this, "Étudiant inscrit avec succès", Toast.LENGTH_SHORT).show();
-        }
-    }
 
-    private void retournerVersHome() {
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
+            }
+        });
     }
 }

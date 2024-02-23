@@ -1,36 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeActivity">
+    android:background="#F0F0F0"
+    tools:context=".AnotherActivity">
 
-    <!-- activity_home.xml -->
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!-- Grand titre "HOME" -->
 
-        <!-- Bouton Inscription -->
-        <Button
-            android:id="@+id/buttonInscription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Inscription"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="200dp" />
+    <!-- Bouton Inscription -->
 
-        <!-- Bouton Liste des Étudiants -->
-        <Button
-            android:id="@+id/buttonListeEtudiants"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Visualisation"
-            android:layout_below="@id/buttonInscription"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="150dp" />
+    <!-- Bouton Liste des Étudiants -->
 
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="112dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="HOME"
+        android:textColor="#333333"
+        android:textSize="48sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonInscription"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="152dp"
+        android:background="#B0CCE3"
+        android:fontFamily="sans-serif-medium"
+        android:text="Inscription"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewTitle" />
+
+    <Button
+        android:id="@+id/buttonListeEtudiants"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="144dp"
+        android:background="#FF5733"
+        android:fontFamily="sans-serif-medium"
+        android:text="Visualisation"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonInscription" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
